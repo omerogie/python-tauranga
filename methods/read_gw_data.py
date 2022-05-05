@@ -342,7 +342,7 @@ def make_coherence_spectra(df_rain,df_gw):
         plot_list = rain_list + [col]
 
         df_tmp = merged_df[plot_list].dropna()
-            # [Pxx, freqs] = mlab.psd(df_tmp[rain_list].mean(axis=1),
+            # [Pxx, freqs] = mlab.psd(df_tmp[rain_list].mean(axis=1), # power spectrum of a timeseries
             #                     NFFT=2**nfft_power,
             #                     noverlap=2048,
             #                     Fs=1 / (15 * 60),  # 15-min data
@@ -350,7 +350,7 @@ def make_coherence_spectra(df_rain,df_gw):
             #                     detrend='linear'
             #                     )
             #
-            # [Pyy, freqs] = mlab.psd(df_tmp[col],
+            # [Pyy, freqs] = mlab.psd(df_tmp[col], # power spectrum of a timeseries
             #                     NFFT=2**nfft_power,
             #                     noverlap=2048,
             #                     Fs=1 / (15 * 60),  # 15-min data
@@ -358,7 +358,7 @@ def make_coherence_spectra(df_rain,df_gw):
             #                     detrend='linear'
             #                     )
             #
-            # [Pxy, freqs] = mlab.csd(df_tmp[rain_list].mean(axis=1), df_tmp[col],
+            # [Pxy, freqs] = mlab.csd(df_tmp[rain_list].mean(axis=1), df_tmp[col], # cross-spectral density power spectrum of two timeseries
             #                         NFFT=2**nfft_power,
             #                         noverlap=2048,
             #                         Fs=1 / (15 * 60),  # 15-min data
@@ -366,6 +366,7 @@ def make_coherence_spectra(df_rain,df_gw):
             #                         detrend='linear'
             #                         )
 
+        # coherence (normalised Pxy). Basically, does all of the above (Pxx, Pyy and Pxy) in one and then normalises.
         [Cxy, freqs] = mlab.cohere(df_tmp[rain_list].mean(axis=1), df_tmp[col],
                             NFFT=2**nfft_power,
                             noverlap=2048,
@@ -389,7 +390,7 @@ def make_coherence_spectra(df_rain,df_gw):
         plt.xticks(rotation=0, ha='center')
         plt.grid('on')
 
-        # plt.subplot(413)
+        # plt.subplot(313) # I left this in for checking if needed
         # plt.semilogx(1 / freqs[1:], 10 * np.log10(abs(Pxy[1:])))
         # plt.grid('on')
         # plt.ylabel('CSD (dB)')
@@ -400,7 +401,7 @@ def make_coherence_spectra(df_rain,df_gw):
 
         plt.subplot(313)
         plt.semilogx(1 / freqs[1:], Cxy[1:])
-        Cxy_av = movingaverage(Cxy, 50)
+        Cxy_av = movingaverage(Cxy, 50) # a moving average looks a bit more comprehensible.
         plt.semilogx(1 / freqs[1:], Cxy_av[1:],"r")
         plt.grid('on')
         plt.ylabel('Coherence')
