@@ -9,3 +9,5 @@ The main.py script currently does this:
  - calculate power spectra Px and Py and ultimately their coherence Cxy (make_coherence_spectra)
  - write results to a CSV file
 I kept the intermediate testing files, which should also still work (no guarantee though). These are now #-commented.
+
+(fork-check)
